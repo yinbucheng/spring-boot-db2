@@ -59,6 +59,7 @@ public class TransactionPointCut implements Pointcut {
         return true;
     }
 
+    //如果为Object对象中的方法忽略
     private boolean sourceMethod(Method method){
         String methodName = method.getName();
         Method[] methods = Object.class.getDeclaredMethods();

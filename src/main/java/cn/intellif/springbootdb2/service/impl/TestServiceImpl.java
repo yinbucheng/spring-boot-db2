@@ -16,7 +16,6 @@ public class TestServiceImpl implements ITestService {
     private IPersonService personService;
 
     @Override
-    @Transactional2
     public void test() {
         personService.test();
         TestEntity testEntity = new TestEntity();
