@@ -6,6 +6,7 @@ import cn.intellif.springbootdb2.service.IPersonService;
 import cn.intellif.springbootdb2.tx.Transactional2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PersonServiceImpl implements IPersonService {
