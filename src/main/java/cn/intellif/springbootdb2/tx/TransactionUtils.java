@@ -17,8 +17,11 @@ public abstract class TransactionUtils {
     public static void beginTransaction(String key) throws SQLException {
         if(uniqueKey.get()==null){
             uniqueKey.set(key);
-            Connection connection = DataSourceUtils.getConnection(getDataSource());
+            Connection connection = getDataSource().getConnection();
             connection.setAutoCommit(false);
+            ConnectionHolder conHolder = new ConnectionHolder(connection);
+            conHolder.setSynchronizedWithTransaction(true);
+            TransactionSynchronizationManager.bindResource(getDataSource(),conHolder);
         }
     }
 
@@ -42,6 +45,10 @@ public abstract class TransactionUtils {
         if(currentKey().equals(key)) {
             Connection connection = DataSourceUtils.getConnection(getDataSource());
             DataSourceUtils.releaseConnection(connection,getDataSource());
+            if(connection!=null&&!connection.isClosed()){
+                connection.close();
+            }
+            TransactionSynchronizationManager.unbindResource(getDataSource());
             uniqueKey.remove();
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>事务执行释放:"+key);
         }
