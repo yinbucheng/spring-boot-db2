@@ -2,18 +2,20 @@ package cn.intellif.springbootdb2.tx;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.aop.support.AopUtils;
 
 import java.lang.reflect.Method;
 
 public class TransactionIntercptor implements MethodInterceptor {
 
     @Override
-    public Object invoke(MethodInvocation methodInvocation) throws Throwable {
+    public Object invoke(MethodInvocation invocation) throws Throwable {
+        Class<?> targetClass = (invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null);
         Object value = null;
-        String key = createKey(methodInvocation.getThis().getClass(),methodInvocation.getMethod());
+        String key = createKey(targetClass,invocation.getMethod());
         try {
             TransactionUtils.beginTransaction(key);
-            methodInvocation.proceed();
+            invocation.proceed();
             //提交事务
             TransactionUtils.commitTransaction(key);
         }catch (Exception e){

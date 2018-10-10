@@ -14,6 +14,7 @@ public class PersonServiceImpl implements IPersonService {
     private PersonDao personDao;
 
     @Transactional2
+//    @Transactional
     @Override
     public void test() {
         PersonEntity personEntity = new PersonEntity();
